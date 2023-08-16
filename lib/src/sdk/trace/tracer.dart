@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
@@ -19,16 +16,16 @@ class Tracer implements api.Tracer {
 
   Tracer(this._processors, this._resource, this._sampler, this._timeProvider,
       this._idGenerator, this._instrumentationLibrary,
-      {sdk.SpanLimits spanLimits})
+      {sdk.SpanLimits? spanLimits})
       : _spanLimits = spanLimits ?? sdk.SpanLimits();
 
   @override
   api.Span startSpan(String name,
-      {api.Context context,
-      api.SpanKind kind,
-      List<api.Attribute> attributes,
-      List<api.SpanLink> links,
-      Int64 startTime}) {
+      {api.Context? context,
+      api.SpanKind kind = api.SpanKind.internal,
+      List<api.Attribute> attributes = const [],
+      List<api.SpanLink> links = const [],
+      Int64 startTime = Int64.ZERO}) {
     context ??= api.Context.current;
 
     // If a valid, active Span is present in the context, use it as this Span's

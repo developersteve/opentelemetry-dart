@@ -14,7 +14,7 @@ class MeterProvider implements api.MeterProvider {
 
   sdk.Resource get resource => _sharedState.resource;
 
-  MeterProvider({sdk.Resource resource})
+  MeterProvider({required sdk.Resource resource})
       : _sharedState = MeterProviderSharedState(resource);
 
   @override

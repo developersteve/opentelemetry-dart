@@ -1,8 +1,5 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import 'package:http/http.dart' as http;
-
+import 'package:fixnum/fixnum.dart';
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 import '../../proto/opentelemetry/proto/collector/trace/v1/trace_service.pb.dart'
@@ -17,9 +14,7 @@ class CollectorExporter implements api.SpanExporter {
   http.Client client;
   var _isShutdown = false;
 
-  CollectorExporter(this.uri, {http.Client httpClient}) {
-    client = httpClient ?? http.Client();
-  }
+  CollectorExporter(this.uri, {http.Client? httpClient}) : client = httpClient ?? http.Client();
 
   @override
   void export(List<api.Span> spans) {
@@ -34,9 +29,11 @@ class CollectorExporter implements api.SpanExporter {
     final body = pb_trace_service.ExportTraceServiceRequest(
         resourceSpans: _spansToProtobuf(spans));
 
-    client.post(uri,
-        body: body.writeToBuffer(),
-        headers: {'Content-Type': 'application/x-protobuf'});
+    client.post(
+      uri,
+      body: body.writeToBuffer(),
+      headers: {'Content-Type': 'application/x-protobuf'},
+    );
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
@@ -147,43 +144,47 @@ class CollectorExporter implements api.SpanExporter {
         links: _spanLinksToProtobuf(span.links));
   }
 
-  pb_common.AnyValue _attributeValueToProtobuf(Object value) {
+  pb_common.AnyValue _attributeValueToProtobuf(Object? value) {
+    if (value == null) {
+      return pb_common.AnyValue();
+    }
+
     switch (value.runtimeType) {
       case String:
-        return pb_common.AnyValue(stringValue: value);
+        return pb_common.AnyValue(stringValue: value as String);
       case bool:
-        return pb_common.AnyValue(boolValue: value);
+        return pb_common.AnyValue(boolValue: value as bool);
       case double:
-        return pb_common.AnyValue(doubleValue: value);
+        return pb_common.AnyValue(doubleValue: value as double);
       case int:
-        return pb_common.AnyValue(intValue: value);
+        return pb_common.AnyValue(intValue: Int64(value as int));
       case List:
         final list = value as List;
         if (list.isNotEmpty) {
           switch (list[0].runtimeType) {
             case String:
-              final values = [] as List<pb_common.AnyValue>;
+              final values = <pb_common.AnyValue>[];
               for (final str in list) {
                 values.add(pb_common.AnyValue(stringValue: str));
               }
               return pb_common.AnyValue(
                   arrayValue: pb_common.ArrayValue(values: values));
             case bool:
-              final values = [] as List<pb_common.AnyValue>;
+              final values = <pb_common.AnyValue>[];
               for (final b in list) {
                 values.add(pb_common.AnyValue(boolValue: b));
               }
               return pb_common.AnyValue(
                   arrayValue: pb_common.ArrayValue(values: values));
             case double:
-              final values = [] as List<pb_common.AnyValue>;
+              final values = <pb_common.AnyValue>[];
               for (final d in list) {
                 values.add(pb_common.AnyValue(doubleValue: d));
               }
               return pb_common.AnyValue(
                   arrayValue: pb_common.ArrayValue(values: values));
             case int:
-              final values = [] as List<pb_common.AnyValue>;
+              final values = <pb_common.AnyValue>[];
               for (final i in list) {
                 values.add(pb_common.AnyValue(intValue: i));
               }

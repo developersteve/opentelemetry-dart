@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import '../../../../api.dart' as api;
 import '../../../../sdk.dart' as sdk;
 
@@ -36,20 +33,22 @@ class W3CTraceContextPropagator implements api.TextMapPropagator {
 
     final parentHeaderMatch =
         traceParentHeaderRegEx.firstMatch(traceParentHeader);
-    final parentHeaderFields = Map<String, String>.fromIterable(
-        parentHeaderMatch.groupNames,
-        key: (element) => element.toString(),
-        value: (element) => parentHeaderMatch.namedGroup(element));
+    final parentHeaderFields = Map<String, String?>.fromEntries(
+      parentHeaderMatch?.groupNames
+          ?.map((name) => MapEntry(name, parentHeaderMatch.namedGroup(name)))
+          ?.where((entry) => entry.value != null) ?? [],
+    );
+
 
     final traceId =
-        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]) ??
+        api.TraceId.fromString(parentHeaderFields[_traceIdFieldKey]!) ??
             api.TraceId.invalid();
     final parentId =
-        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]) ??
+        api.SpanId.fromString(parentHeaderFields[_parentIdFieldKey]!) ??
             api.SpanId.invalid();
-    final traceFlags =
-        int.parse(parentHeaderFields[_traceFlagsFieldKey], radix: 16) ??
-            api.TraceFlags.none;
+    final traceFlags = int.parse(parentHeaderFields[_traceFlagsFieldKey]!,
+            radix: 16) ??
+        api.TraceFlags.none;
 
     final traceStateHeader = getter.get(carrier, _traceStateHeaderKey);
     final traceState = (traceStateHeader != null)

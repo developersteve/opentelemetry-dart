@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import '../../../api.dart' as api;
 
 /// Representation of the state of a trace.
@@ -73,7 +70,7 @@ class TraceState implements api.TraceState {
   }
 
   @override
-  String get(String key) => _state[key];
+  String get(String key) => _state[key] ?? '';
 
   /// Adds a key value pair to the TraceState.
   ///

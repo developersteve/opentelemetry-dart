@@ -1,11 +1,8 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import '../../../api.dart';
 
 /// A representation of a collection of metadata attached to a trace span.
 class Attributes {
-  Map<String, Object> _attributes = {};
+  Map<String, Object?> _attributes = {};
 
   /// Instantiate an empty Attributes.
   Attributes.empty() {
@@ -13,7 +10,7 @@ class Attributes {
   }
 
   /// Retrieve the value associated with the Attribute with key [key].
-  Object get(String key) => _attributes[key];
+  Object? get(String key) => _attributes[key];
 
   ///
   int get length => _attributes.length;

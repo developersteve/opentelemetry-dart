@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
@@ -46,7 +43,7 @@ abstract class Span {
   api.SpanId get parentSpanId;
 
   /// The name of the span.
-  String name;
+  late String name;
 
   /// Whether this Span is recording information like events with the
   /// addEvent operation, status with setStatus, etc.
@@ -62,7 +59,7 @@ abstract class Span {
   ///
   /// Only the value of the last call will be recorded, and implementations are
   /// free to ignore previous calls.
-  void setStatus(api.StatusCode status, {String description});
+  void setStatus(api.StatusCode status, {String? description});
 
   /// Retrieve the status of the [Span].
   api.SpanStatus get status;
@@ -77,11 +74,11 @@ abstract class Span {
   api.InstrumentationLibrary get instrumentationLibrary;
 
   /// Record metadata about an event occurring during this span.
-  void addEvent(String name, Int64 timestamp, {List<api.Attribute> attributes});
+  void addEvent(String name, Int64 timestamp, {List<api.Attribute>? attributes});
 
   /// Marks the end of this span's execution.
   void end();
 
   /// Record metadata about an exception occurring during this span.
-  void recordException(dynamic exception, {StackTrace stackTrace});
+  void recordException(dynamic exception, {StackTrace? stackTrace});
 }

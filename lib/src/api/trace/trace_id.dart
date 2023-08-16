@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import '../../../api.dart' as api;
 
 /// Class representing an ID for a single Trace.
@@ -9,7 +6,7 @@ class TraceId {
   static const sizeBits = 32;
   static const sizeBytes = 16;
 
-  List<int> _id;
+  late List<int> _id; // Added 'late' keyword
 
   TraceId(this._id);
   TraceId.fromIdGenerator(api.IdGenerator generator) {
@@ -23,7 +20,7 @@ class TraceId {
       _id.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
     }
   }
-  TraceId.invalid() : this(List<int>.filled(sizeBytes, 0));
+  TraceId.invalid() : _id = List<int>.filled(sizeBytes, 0);
 
   /// Retrieve this TraceId as a list of byte values.
   List<int> get() => _id;

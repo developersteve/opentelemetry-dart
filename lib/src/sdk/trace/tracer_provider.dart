@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import './tracer.dart';
 import '../../../api.dart' as api;
 import '../../../sdk.dart' as sdk;
@@ -15,11 +12,11 @@ class TracerProviderBase implements api.TracerProvider {
   final sdk.SpanLimits _spanLimits;
 
   TracerProviderBase(
-      {List<api.SpanProcessor> processors,
-      sdk.Resource resource,
-      sdk.Sampler sampler,
-      api.IdGenerator idGenerator,
-      sdk.SpanLimits spanLimits})
+      {List<api.SpanProcessor>? processors,
+      sdk.Resource? resource,
+      sdk.Sampler? sampler,
+      api.IdGenerator? idGenerator,
+      sdk.SpanLimits? spanLimits})
       : _processors = processors ?? [], // Default to a no-op TracerProvider.
         _resource = resource ?? sdk.Resource([]),
         _sampler = sampler ?? sdk.ParentBasedSampler(sdk.AlwaysOnSampler()),

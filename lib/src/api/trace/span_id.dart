@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import '../../../api.dart' as api;
 
 /// Class representing an ID for a single [api.Span].
@@ -9,7 +6,7 @@ class SpanId {
   static const sizeBits = 16;
   static const sizeBytes = 8;
 
-  List<int> _id;
+  late List<int> _id; // Added 'late' keyword
 
   SpanId(this._id);
   SpanId.fromIdGenerator(api.IdGenerator generator) {
@@ -23,8 +20,8 @@ class SpanId {
       _id.add(int.parse('${id[i]}${id[i + 1]}', radix: 16));
     }
   }
-  SpanId.invalid() : this(List<int>.filled(sizeBytes, 0));
-  SpanId.root() : this([]);
+  SpanId.invalid() : _id = List<int>.filled(sizeBytes, 0);
+  SpanId.root() : _id = [];
 
   /// Retrieve this SpanId as a list of byte values.
   List<int> get() => _id;

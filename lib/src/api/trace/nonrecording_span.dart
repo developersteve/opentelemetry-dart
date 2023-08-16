@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 import 'package:fixnum/fixnum.dart';
 
 import '../../../api.dart' as api;
@@ -28,7 +25,7 @@ class NonRecordingSpan implements api.Span {
   void end() {}
 
   @override
-  Int64 get endTime => null;
+  Int64 get endTime => Int64(0);
 
   @override
   String get name => 'NON_RECORDING';
@@ -43,26 +40,29 @@ class NonRecordingSpan implements api.Span {
   api.SpanId get parentSpanId => api.SpanId.invalid();
 
   @override
-  void setStatus(api.StatusCode status, {String description}) {}
+  void setStatus(api.StatusCode status, {String? description}) {} // Fixed the function signature
 
   @override
   api.SpanContext get spanContext => _spanContext;
 
   @override
-  Int64 get startTime => null;
+  Int64 get startTime => Int64(0);
 
   @override
   api.SpanStatus get status => _status;
 
   @override
-  api.InstrumentationLibrary get instrumentationLibrary => null;
+  api.InstrumentationLibrary get instrumentationLibrary {
+      // You might want to either extend the abstract class or use some concrete implementation of it
+      throw UnimplementedError("Return a proper instance or value here");
+  }
 
   @override
-  void recordException(dynamic exception, {StackTrace stackTrace}) {}
+  void recordException(dynamic exception, {StackTrace? stackTrace}) {}
 
   @override
   void addEvent(String name, Int64 timestamp,
-      {List<api.Attribute> attributes}) {}
+      {List<api.Attribute>? attributes}) {} // Use nullable type
 
   @override
   api.SpanKind get kind => api.SpanKind.internal;
